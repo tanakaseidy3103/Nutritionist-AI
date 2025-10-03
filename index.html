@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>食材分析デモアプリ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>食材分析デモアプリ</h1>
+    <label for="api-key">OpenAI APIキー:</label>
+    <input type="password" id="api-key" placeholder="APIキーを入力してください">
+    <div id="camera-area">
+      <video id="video" autoplay playsinline></video>
+      <canvas id="canvas" style="display:none;"></canvas>
+    </div>
+    <button id="analyze-btn">分析する</button>
+    <div id="result-area">
+      <div id="description"></div>
+      <div id="recipes"></div>
+      <div id="recipe-detail"></div>
+      <button id="save-recipe-btn" style="display:none; margin-top:12px;">レシピを保存</button>
+      <button id="view-history-btn" style="margin-top:12px;">保存したレシピを見る</button>
+      <div id="toast" class="toast" style="display:none;"></div>
+      <div id="spinner" class="spinner" style="display:none;"></div>
+    </div>
+    <!-- Modal de histórico -->
+    <div id="history-modal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span id="close-history" class="close">&times;</span>
+        <div id="history-header">
+          <span id="history-counter"></span>
+          <input id="history-filter" type="text" placeholder="キーワードで検索" />
+          <button id="clear-history-btn">履歴をクリア</button>
+        </div>
+        <div id="history-list"></div>
+      </div>
+    </div>
+  </div>
+  <script src="camera.js"></script>
+  <script src="openai.js"></script>
+  <script src="voice.js"></script>
+  <script src="history.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

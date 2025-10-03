@@ -1,0 +1,302 @@
+body {
+  font-family: 'Segoe UI', 'Meiryo', 'Noto Sans JP', 'Yu Gothic', sans-serif;
+  background: linear-gradient(120deg, #f7f7f7 60%, #eafff0 100%);
+  margin: 0;
+  padding: 0;
+}
+.container {
+  max-width: 440px;
+  margin: 48px auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,128,64,0.10), 0 1.5px 8px rgba(255,140,0,0.08);
+  padding: 32px 28px 28px 28px;
+  text-align: center;
+  border: 1.5px solid #e0ffe0;
+}
+h1 {
+  font-size: 1.7em;
+  margin-bottom: 18px;
+  color: #1a7f3c;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #ff8c1a;
+  font-size: 1.08em;
+}
+#api-key {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 18px;
+  border: 1.5px solid #b2e6c7;
+  border-radius: 8px;
+  background: #f8fff8;
+  font-size: 1em;
+}
+#camera-area {
+  margin-bottom: 18px;
+}
+#video {
+  width: 100%;
+  border-radius: 12px;
+  background: #e0ffe0;
+  border: 1.5px solid #b2e6c7;
+}
+#analyze-btn {
+  background: linear-gradient(90deg, #1a7f3c 60%, #ff8c1a 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 1.08em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(26,127,60,0.08);
+  transition: background 0.2s;
+}
+#analyze-btn:hover {
+  background: linear-gradient(90deg, #14632e 60%, #e67600 100%);
+}
+#result-area {
+  margin-top: 20px;
+}
+#description {
+  margin-bottom: 18px;
+  font-size: 1.15em;
+  color: #1a7f3c;
+  font-weight: 500;
+}
+#recipes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+#recipes button {
+  margin: 0;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 10px;
+  background: #fff7e6;
+  color: #ff8c1a;
+  font-size: 1.05em;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(255,140,26,0.08);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+#recipes button:hover {
+  background: #ffe0b2;
+  color: #fff;
+}
+#recipe-detail {
+  margin-top: 18px;
+  background: #f0fff4;
+  border-radius: 12px;
+  border: 1.5px solid #b2e6c7;
+  padding: 16px;
+  text-align: left;
+  font-size: 1.05em;
+  color: #1a7f3c;
+  box-shadow: 0 1px 6px rgba(26,127,60,0.06);
+}
+#save-recipe-btn, #view-history-btn {
+  background: linear-gradient(90deg, #ff8c1a 60%, #1a7f3c 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 1.05em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-right: 8px;
+  box-shadow: 0 1px 4px rgba(26,127,60,0.08);
+  transition: background 0.2s, color 0.2s;
+}
+#save-recipe-btn:hover, #view-history-btn:hover {
+  background: linear-gradient(90deg, #e67600 60%, #14632e 100%);
+}
+#history-list {
+  margin-top: 18px;
+  background: #fff7e6;
+  border-radius: 12px;
+  border: 1.5px solid #ffddb2;
+  padding: 16px;
+  text-align: left;
+  font-size: 1.02em;
+  color: #ff8c1a;
+  box-shadow: 0 1px 6px rgba(255,140,26,0.06);
+  max-height: 260px;
+  overflow-y: auto;
+}
+.recipe-card {
+  width: 100%;
+  background: #fff7e6;
+  border-radius: 14px;
+  border: 1.5px solid #ffddb2;
+  box-shadow: 0 1px 6px rgba(255,140,26,0.08);
+  margin-bottom: 16px;
+  padding: 16px 14px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  position: relative;
+}
+.recipe-card img {
+  width: 100%;
+  max-height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+.recipe-card .mini-desc {
+  font-size: 0.98em;
+  color: #1a7f3c;
+  margin-bottom: 4px;
+}
+.recipe-card .save-btn {
+  background: linear-gradient(90deg, #ff8c1a 60%, #1a7f3c 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+  align-self: flex-end;
+  box-shadow: 0 1px 4px rgba(26,127,60,0.08);
+  transition: background 0.2s, color 0.2s;
+}
+.recipe-card .save-btn:hover {
+  background: linear-gradient(90deg, #e67600 60%, #14632e 100%);
+}
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  background: #1a7f3c;
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 24px;
+  font-size: 1.08em;
+  box-shadow: 0 2px 12px rgba(26,127,60,0.12);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s, bottom 0.4s;
+}
+.toast.show {
+  opacity: 1;
+  pointer-events: auto;
+  bottom: 56px;
+}
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(255,255,255,0.6);
+  z-index: 999;
+}
+.spinner::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 48px;
+  border: 6px solid #ff8c1a;
+  border-top: 6px solid #1a7f3c;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: fixed;
+  z-index: 1100;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.18);
+}
+.modal-content {
+  background: #fff;
+  border-radius: 16px;
+  margin-top: 40px;
+  padding: 24px 18px 18px 18px;
+  min-width: 90vw;
+  max-width: 440px;
+  box-shadow: 0 4px 24px rgba(0,128,64,0.10);
+  position: relative;
+}
+.close {
+  position: absolute;
+  right: 18px;
+  top: 12px;
+  font-size: 1.6em;
+  color: #ff8c1a;
+  cursor: pointer;
+}
+#history-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+#history-counter {
+  font-size: 1.08em;
+  color: #1a7f3c;
+  font-weight: 600;
+}
+#history-filter {
+  flex: 1;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #b2e6c7;
+  font-size: 1em;
+}
+#clear-history-btn {
+  background: #fff7e6;
+  color: #ff8c1a;
+  border: 1.5px solid #ffddb2;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+#clear-history-btn:hover {
+  background: #ffe0b2;
+  color: #fff;
+}
+@media (max-width: 600px) {
+  .container {
+    max-width: 98vw;
+    padding: 18px 4vw 18px 4vw;
+  }
+  .modal-content {
+    min-width: 98vw;
+    max-width: 98vw;
+    padding: 12px 2vw 12px 2vw;
+  }
+  .recipe-card {
+    padding: 10px 6px 10px 6px;
+  }
+  #history-list {
+    font-size: 0.98em;
+    padding: 10px;
+  }
+}
