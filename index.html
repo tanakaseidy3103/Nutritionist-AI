@@ -14,10 +14,16 @@
     <div id="camera-area">
       <video id="video" autoplay playsinline></video>
       <canvas id="canvas" style="display:none;"></canvas>
+      <img id="preview" alt="プレビュー" style="display:none;width:100%;border-radius:12px;border:1.5px solid #b2e6c7;background:#f8fff8;margin-top:8px;" />
     </div>
-    <button id="analyze-btn">分析する</button>
+    <div id="controls" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+      <button id="capture-btn">撮影</button>
+      <button id="retake-btn" style="display:none;">撮り直す</button>
+      <button id="analyze-btn">分析する</button>
+    </div>
     <div id="result-area">
       <div id="description"></div>
+      <div id="ingredients" aria-label="検出された食材" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-start;margin-bottom:10px;"></div>
       <div id="recipes"></div>
       <div id="recipe-detail"></div>
       <button id="save-recipe-btn" style="display:none; margin-top:12px;">レシピを保存</button>
