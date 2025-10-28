@@ -5,15 +5,42 @@ const canvas = document.getElementById('canvas');
 const preview = document.getElementById('preview');
 const captureBtn = document.getElementById('capture-btn');
 const retakeBtn = document.getElementById('retake-btn');
+// REMOVE select de câmeras se existir
+const oldCameraSelect = document.getElementById('camera-select');
+if (oldCameraSelect) oldCameraSelect.remove();
 
-async function startCamera() {
+// Botão para alternar entre frontal/traseira
+let switchBtn = document.getElementById('switch-btn');
+if (!switchBtn) {
+  switchBtn = document.createElement('button');
+  switchBtn.id = 'switch-btn';
+  switchBtn.textContent = '🔄 カメラ切り替え';
+  switchBtn.style.marginRight = '8px';
+  document.getElementById('camera-area').prepend(switchBtn);
+}
+
+let facingMode = 'user';
+let currentStream = null;
+
+async function startCameraWithFacingMode(newFacingMode) {
+  facingMode = newFacingMode;
+  if (currentStream) {
+    currentStream.getTracks().forEach(track => track.stop());
+  }
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const constraints = { video: { facingMode } };
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
     video.srcObject = stream;
+    currentStream = stream;
   } catch (err) {
     alert('カメラにアクセスできません: ' + err.message);
   }
 }
+
+switchBtn.addEventListener('click', () => {
+  const nextMode = facingMode === 'user' ? 'environment' : 'user';
+  startCameraWithFacingMode(nextMode);
+});
 
 function captureImage() {
   canvas.width = video.videoWidth;
@@ -28,7 +55,9 @@ function captureImage() {
   return dataUrl;
 }
 
-window.addEventListener('DOMContentLoaded', startCamera);
+window.addEventListener('DOMContentLoaded', () => {
+  startCameraWithFacingMode(facingMode);
+});
 
 // Exportar função para uso externo
 window.captureImage = captureImage;

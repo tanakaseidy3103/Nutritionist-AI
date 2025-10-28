@@ -19,9 +19,6 @@
 
 ---
 
-## 🖥️ デモリンク
-
-- **スマホで最適化済み**  
-- iPhone 15 / Androidでも動作  
-- [Netlifyでデモを確認](https://ingredient-analysis-demo-app.netlify.app)
-
+## 🖥️ Deploy/Vercel とモバイル
+こちらはアプリのデプロイリンクです:
+https://nutritionist-ai-wheat.vercel.app/
