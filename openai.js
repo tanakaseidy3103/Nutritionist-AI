@@ -1,5 +1,5 @@
 const analyzeBtn = document.getElementById('analyze-btn');
-const apiKeyInput = document.getElementById('api-key');
+const apiKeyInput = document.getElementById('api-key'); // mantido, mas não mais obrigatório
 const descriptionDiv = document.getElementById('description');
 const ingredientsDiv = document.getElementById('ingredients');
 const recipesDiv = document.getElementById('recipes');
@@ -92,11 +92,6 @@ async function generateRecipeImage(apiKey, prompt) {
 }
 
 analyzeBtn.addEventListener('click', async () => {
-  const apiKey = apiKeyInput.value.trim();
-  if (!apiKey) {
-    alert('APIキーを入力してください');
-    return;
-  }
   window.showSpinner && window.showSpinner();
   descriptionDiv.textContent = '分析中...';
   recipesDiv.innerHTML = '';
@@ -111,45 +106,28 @@ analyzeBtn.addEventListener('click', async () => {
     imageData = window.captureImage();
   }
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: 'gpt-4o-mini',
-      messages: [
-        {
-          role: 'system',
-          content: 'あなたは画像内の食材を認識し、JSONで構造化出力を返す日本語アシスタントです。返答は必ず次のJSONのみ: {"description": string, "ingredients": string[], "recipes": string[3]}. 余計な文章は出力しないでください。'
-        },
-        {
-          role: 'user',
-          content: [
-            { type: 'text', text: 'この画像の食材を分析し、説明と食材リスト、3つのレシピ名を返してください。JSONのみで返答してください。' },
-            { type: 'image_url', image_url: { url: imageData } }
-          ]
-        }
-      ],
-      max_tokens: 500
-    })
-  });
+  // Chama backend seguro
+  let response;
+  try {
+    response = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageData })
+    });
+  } catch (e) {
+    window.hideSpinner && window.hideSpinner();
+    descriptionDiv.textContent = 'APIエラー: ネットワークに接続できません。';
+    return;
+  }
 
   window.hideSpinner && window.hideSpinner();
 
   if (!response.ok) {
-    descriptionDiv.textContent = 'APIエラー: ' + response.statusText;
+    const msg = await response.text();
+    descriptionDiv.textContent = 'APIエラー: ' + msg;
     return;
   }
-  const data = await response.json();
-  let parsed;
-  try {
-    parsed = JSON.parse(data.choices[0].message.content);
-  } catch {
-    // Fallback para conteúdo não-JSON
-    parsed = { description: data.choices[0].message.content, ingredients: [], recipes: [] };
-  }
+  const parsed = await response.json();
   descriptionDiv.textContent = parsed.description || '';
   lastIngredients = Array.isArray(parsed.ingredients) ? parsed.ingredients : [];
   lastRecipes = Array.isArray(parsed.recipes) ? parsed.recipes : [];
@@ -177,7 +155,7 @@ analyzeBtn.addEventListener('click', async () => {
     btnSave.textContent = '保存';
     btnSave.onclick = async () => {
       window.showSpinner && window.showSpinner();
-      const detail = await showRecipeDetail(apiKey, name, i, true);
+      const detail = await showRecipeDetail(name, i, true);
       window.hideSpinner && window.hideSpinner();
       const recipeObj = {
         name: name,
@@ -188,18 +166,14 @@ analyzeBtn.addEventListener('click', async () => {
       window.showToast && window.showToast('保存しました！');
     };
     const btnLike = document.createElement('button');
-    btnLike.className = 'save-btn';
-    btnLike.style.background = '#1a7f3c';
-    btnLike.style.marginLeft = '8px';
+    btnLike.className = 'save-btn like-btn';
     btnLike.textContent = 'いいね';
     btnLike.onclick = () => {
       saveFeedback(name, 'like');
       window.showToast && window.showToast('いいね！');
     };
     const btnDislike = document.createElement('button');
-    btnDislike.className = 'save-btn';
-    btnDislike.style.background = '#ff8c1a';
-    btnDislike.style.marginLeft = '8px';
+    btnDislike.className = 'save-btn dislike-btn';
     btnDislike.textContent = 'よくないね';
     btnDislike.onclick = () => {
       saveFeedback(name, 'dislike');
@@ -226,35 +200,28 @@ function toggleIngredient(idx, el) {
   el.setAttribute('aria-pressed', active ? 'true' : 'false');
 }
 
-async function showRecipeDetail(apiKey, recipeName, idx, silent) {
+async function showRecipeDetail(recipeName, idx, silent) {
   recipeDetailDiv.textContent = 'レシピ詳細を取得中...';
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: 'gpt-4o-mini',
-      messages: [
-        {
-          role: 'system',
-          content: 'あなたは日本語のレシピアシスタントです。指定された料理名について、材料と手順を日本語で簡潔に説明します。入力で有効な食材のリストが渡された場合、その食材のみで作れるバージョンを優先して提案してください。'
-        },
-        {
-          role: 'user',
-          content: `料理名: ${recipeName}\n利用可能な食材: ${getActiveIngredientsList().join(', ')}`
-        }
-      ],
-      max_tokens: 500
-    })
-  });
+  let response;
+  try {
+    response = await fetch('/api/recipeDetail', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        recipeName,
+        availableIngredients: getActiveIngredientsList()
+      })
+    });
+  } catch (e) {
+    recipeDetailDiv.textContent = 'APIエラー: ネットワークに接続できません。';
+    return '';
+  }
   if (!response.ok) {
-    recipeDetailDiv.textContent = 'APIエラー: ' + response.statusText;
+    recipeDetailDiv.textContent = 'APIエラー: ' + (await response.text());
     return '';
   }
   const data = await response.json();
-  const content = data.choices[0].message.content;
+  const content = data.content;
   if (!silent) {
     recipeDetailDiv.textContent = content;
     window.speakText && window.speakText(content);

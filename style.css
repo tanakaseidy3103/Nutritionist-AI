@@ -198,10 +198,10 @@ label {
   margin-bottom: 4px;
 }
 .recipe-card .save-btn {
-  background: #111 !important;
+  background: #e94a21 !important;
   color: #fff !important;
-  border: 2px solid #444;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  border: 2px solid #b51200;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.10);
   border-radius: 8px;
   padding: 8px 18px;
   font-size: 1em;
@@ -209,10 +209,8 @@ label {
   cursor: pointer;
   margin-top: 6px;
   align-self: flex-end;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  box-shadow: 0 2px 8px rgba(233,74,33,0.15);
   opacity: 1 !important;
-  filter: none !important;
-  transition: background 0.2s, color 0.2s, opacity 0.2s;
 }
 
 .recipe-card .save-btn[disabled],
@@ -221,8 +219,21 @@ label {
   filter: grayscale(0.2);
   color: #fff !important;
 }
-.recipe-card .save-btn:hover {
-  background: linear-gradient(90deg, #e67600 60%, #14632e 100%);
+
+.recipe-card .like-btn {
+  background: #fff !important;
+  color: #0c7a32 !important;
+  border: 2px solid #1a7f3c !important;
+  font-weight: bold;
+  box-shadow: 0 1px 4px rgba(26,127,60,0.08);
+}
+
+.recipe-card .dislike-btn {
+  background: #fff !important;
+  color: #e94a21 !important;
+  border: 2px solid #e94a21 !important;
+  font-weight: bold;
+  box-shadow: 0 1px 4px rgba(233,74,33,0.08);
 }
 .toast {
   position: fixed;
