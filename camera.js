@@ -18,11 +18,22 @@ if (!switchBtn) {
   switchBtn.style.marginRight = '8px';
   document.getElementById('camera-area').prepend(switchBtn);
 }
-// Ocultar botão de troca para apresentação com câmera frontal
-if (switchBtn) switchBtn.style.display = 'none';
+// Exibir botão de troca
+if (switchBtn) switchBtn.style.display = 'inline-block';
 
 let facingMode = 'user';
 let currentStream = null;
+
+function applyMirrorForMode() {
+  if (facingMode === 'user') {
+    video.classList.add('mirror');
+    // manter preview coerente com modo atual
+    if (preview && preview.style.display !== 'none') preview.classList.add('mirror');
+  } else {
+    video.classList.remove('mirror');
+    if (preview) preview.classList.remove('mirror');
+  }
+}
 
 async function startCameraWithFacingMode(newFacingMode) {
   facingMode = newFacingMode;
@@ -34,13 +45,17 @@ async function startCameraWithFacingMode(newFacingMode) {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     video.srcObject = stream;
     currentStream = stream;
+    applyMirrorForMode();
   } catch (err) {
     alert('カメラにアクセスできません: ' + err.message);
   }
 }
 
-// Desabilitar alternância de câmera durante a apresentação
-if (switchBtn) switchBtn.onclick = (e) => { e.preventDefault(); };
+// Alternar entre frontal e traseira
+if (switchBtn) switchBtn.onclick = () => {
+  const nextMode = facingMode === 'user' ? 'environment' : 'user';
+  startCameraWithFacingMode(nextMode);
+};
 
 function captureImage() {
   canvas.width = video.videoWidth;
@@ -52,20 +67,13 @@ function captureImage() {
   video.style.display = 'none';
   captureBtn && (captureBtn.style.display = 'none');
   retakeBtn && (retakeBtn.style.display = 'inline-block');
-  // Espelhar UI para câmera frontal
-  if (facingMode === 'user') {
-    video.classList.add('mirror');
-    preview.classList.add('mirror');
-  }
+  applyMirrorForMode();
   return dataUrl;
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   startCameraWithFacingMode(facingMode);
-  // Espelho inicial para frontal
-  if (facingMode === 'user') {
-    video.classList.add('mirror');
-  }
+  applyMirrorForMode();
 });
 
 // Exportar função para uso externo
@@ -85,10 +93,7 @@ if (retakeBtn) {
     video.style.display = 'block';
     retakeBtn.style.display = 'none';
     captureBtn.style.display = 'inline-block';
-    if (facingMode === 'user') {
-      video.classList.add('mirror');
-      preview.classList.remove('mirror');
-    }
+    applyMirrorForMode();
   });
 }
 
@@ -104,10 +109,7 @@ if (uploadInput) {
       video.style.display = 'none';
       if (captureBtn) captureBtn.style.display = 'none';
       if (retakeBtn) retakeBtn.style.display = 'inline-block';
-      if (facingMode === 'user') {
-        video.classList.add('mirror');
-        preview.classList.add('mirror');
-      }
+      applyMirrorForMode();
       const analyzeBtn = document.getElementById('analyze-btn');
       if (analyzeBtn) analyzeBtn.click();
     };
