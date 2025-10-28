@@ -1,0 +1,21 @@
+{
+  "name": "Nutritionist AI",
+  "short_name": "NutritionistAI",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f7f7f7",
+  "theme_color": "#1a7f3c",
+  "description": "App inteligente para analisar alimentos e sugerir receitas usando IA.",
+  "icons": [
+    {
+      "src": "favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

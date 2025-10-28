@@ -76,3 +76,20 @@ if (retakeBtn) {
     captureBtn.style.display = 'inline-block';
   });
 }
+
+const uploadInput = document.getElementById('upload-image');
+if (uploadInput) {
+  uploadInput.addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+      video.style.display = 'none';
+      if (captureBtn) captureBtn.style.display = 'none';
+      if (retakeBtn) retakeBtn.style.display = 'inline-block';
+    };
+    reader.readAsDataURL(file);
+  });
+}

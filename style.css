@@ -198,10 +198,10 @@ label {
   margin-bottom: 4px;
 }
 .recipe-card .save-btn {
-  background: linear-gradient(90deg, #ff8c1a 60%, #ff9800 100%);
+  background: #111 !important;
   color: #fff !important;
-  border: 3px solid #f79726;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.14);
+  border: 2px solid #444;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.18);
   border-radius: 8px;
   padding: 8px 18px;
   font-size: 1em;
@@ -209,7 +209,7 @@ label {
   cursor: pointer;
   margin-top: 6px;
   align-self: flex-end;
-  box-shadow: 0 2px 8px rgba(255,152,0,0.10);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
   opacity: 1 !important;
   filter: none !important;
   transition: background 0.2s, color 0.2s, opacity 0.2s;
@@ -217,7 +217,7 @@ label {
 
 .recipe-card .save-btn[disabled],
 .recipe-card .save-btn.disabled {
-  opacity: 0.7;
+  opacity: 0.55;
   filter: grayscale(0.2);
   color: #fff !important;
 }
