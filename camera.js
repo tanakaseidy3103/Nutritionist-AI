@@ -18,6 +18,8 @@ if (!switchBtn) {
   switchBtn.style.marginRight = '8px';
   document.getElementById('camera-area').prepend(switchBtn);
 }
+// Ocultar botão de troca para apresentação com câmera frontal
+if (switchBtn) switchBtn.style.display = 'none';
 
 let facingMode = 'user';
 let currentStream = null;
@@ -37,10 +39,8 @@ async function startCameraWithFacingMode(newFacingMode) {
   }
 }
 
-switchBtn.addEventListener('click', () => {
-  const nextMode = facingMode === 'user' ? 'environment' : 'user';
-  startCameraWithFacingMode(nextMode);
-});
+// Desabilitar alternância de câmera durante a apresentação
+if (switchBtn) switchBtn.onclick = (e) => { e.preventDefault(); };
 
 function captureImage() {
   canvas.width = video.videoWidth;
@@ -52,11 +52,20 @@ function captureImage() {
   video.style.display = 'none';
   captureBtn && (captureBtn.style.display = 'none');
   retakeBtn && (retakeBtn.style.display = 'inline-block');
+  // Espelhar UI para câmera frontal
+  if (facingMode === 'user') {
+    video.classList.add('mirror');
+    preview.classList.add('mirror');
+  }
   return dataUrl;
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   startCameraWithFacingMode(facingMode);
+  // Espelho inicial para frontal
+  if (facingMode === 'user') {
+    video.classList.add('mirror');
+  }
 });
 
 // Exportar função para uso externo
@@ -66,6 +75,8 @@ window.captureImage = captureImage;
 if (captureBtn) {
   captureBtn.addEventListener('click', () => {
     captureImage();
+    const analyzeBtn = document.getElementById('analyze-btn');
+    if (analyzeBtn) analyzeBtn.click();
   });
 }
 if (retakeBtn) {
@@ -74,6 +85,10 @@ if (retakeBtn) {
     video.style.display = 'block';
     retakeBtn.style.display = 'none';
     captureBtn.style.display = 'inline-block';
+    if (facingMode === 'user') {
+      video.classList.add('mirror');
+      preview.classList.remove('mirror');
+    }
   });
 }
 
@@ -89,6 +104,12 @@ if (uploadInput) {
       video.style.display = 'none';
       if (captureBtn) captureBtn.style.display = 'none';
       if (retakeBtn) retakeBtn.style.display = 'inline-block';
+      if (facingMode === 'user') {
+        video.classList.add('mirror');
+        preview.classList.add('mirror');
+      }
+      const analyzeBtn = document.getElementById('analyze-btn');
+      if (analyzeBtn) analyzeBtn.click();
     };
     reader.readAsDataURL(file);
   });

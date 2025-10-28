@@ -12,6 +12,37 @@ const langSelect = document.getElementById('lang-select');
 const timeSelect = document.getElementById('time-select');
 const dietSelect = document.getElementById('diet-select');
 
+const PREFS_KEY = 'user_prefs';
+
+function loadPrefs() {
+  try {
+    const raw = localStorage.getItem(PREFS_KEY);
+    if (!raw) return;
+    const prefs = JSON.parse(raw);
+    if (prefs.lang && langSelect) langSelect.value = prefs.lang;
+    if (prefs.time && timeSelect) timeSelect.value = prefs.time;
+    if (prefs.diet && dietSelect) dietSelect.value = prefs.diet;
+  } catch {}
+}
+
+function savePrefs() {
+  try {
+    const prefs = {
+      lang: (langSelect && langSelect.value) || 'ja',
+      time: (timeSelect && timeSelect.value) || 'any',
+      diet: (dietSelect && dietSelect.value) || 'none'
+    };
+    localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
+  } catch {}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadPrefs();
+  langSelect && langSelect.addEventListener('change', savePrefs);
+  timeSelect && timeSelect.addEventListener('change', savePrefs);
+  dietSelect && dietSelect.addEventListener('change', savePrefs);
+});
+
 let lastRecipes = [];
 let lastIngredients = [];
 const FEEDBACK_KEY = 'recipe_feedback';

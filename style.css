@@ -46,6 +46,10 @@ label {
   background: #e0ffe0;
   border: 1.5px solid #b2e6c7;
 }
+/* Modo espelho para apresentação com câmera frontal */
+.mirror {
+  transform: scaleX(-1);
+}
 #analyze-btn {
   background: linear-gradient(90deg, #1a7f3c 60%, #ff8c1a 100%);
   color: #fff;
