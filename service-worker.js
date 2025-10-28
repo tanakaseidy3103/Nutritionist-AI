@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nutritionist-ai-cache-v1';
+const CACHE_NAME = 'nutritionist-ai-cache-v2';
 const urlsToCache = [
   '/',
   '/index.html',
