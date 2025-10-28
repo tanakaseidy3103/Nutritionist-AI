@@ -8,6 +8,9 @@ const viewHistoryBtn = document.getElementById('view-history-btn');
 const historyModal = document.getElementById('history-modal');
 const closeHistory = document.getElementById('close-history');
 const historyList = document.getElementById('history-list');
+const langSelect = document.getElementById('lang-select');
+const timeSelect = document.getElementById('time-select');
+const dietSelect = document.getElementById('diet-select');
 
 let lastRecipes = [];
 let lastIngredients = [];
@@ -97,7 +100,6 @@ analyzeBtn.addEventListener('click', async () => {
   recipesDiv.innerHTML = '';
   recipeDetailDiv.innerHTML = '';
 
-  // Usa imagem capturada se já existir preview; se não, captura agora
   let imageData = '';
   const previewEl = document.getElementById('preview');
   if (previewEl && previewEl.style.display !== 'none' && previewEl.src) {
@@ -106,13 +108,18 @@ analyzeBtn.addEventListener('click', async () => {
     imageData = window.captureImage();
   }
 
-  // Chama backend seguro
+  const prefs = {
+    lang: (langSelect && langSelect.value) || 'ja',
+    time: (timeSelect && timeSelect.value) || 'any',
+    diet: (dietSelect && dietSelect.value) || 'none'
+  };
+
   let response;
   try {
     response = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ imageData })
+      body: JSON.stringify({ imageData, prefs })
     });
   } catch (e) {
     window.hideSpinner && window.hideSpinner();
@@ -184,7 +191,21 @@ analyzeBtn.addEventListener('click', async () => {
     card.appendChild(btnDislike);
     recipesDiv.appendChild(card);
   }
-  window.speakText && window.speakText(descriptionDiv.textContent + '。レシピ例は' + lastRecipes.join('、') + 'です。');
+  const spokenLang = prefs.lang === 'pt' ? 'pt-BR' : (prefs.lang === 'en' ? 'en-US' : 'ja-JP');
+  if (window.speakText) {
+    const originalSpeak = window.speakText;
+    window.speakText = function(text) {
+      try {
+        const utter = new window.SpeechSynthesisUtterance(text);
+        utter.lang = spokenLang;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utter);
+      } catch {
+        originalSpeak(text);
+      }
+    }
+  }
+  window.speakText && window.speakText(descriptionDiv.textContent + (prefs.lang==='ja' ? '。レシピ例は' : prefs.lang==='pt' ? '. Exemplos de receitas: ' : '. Recipe ideas: ') + lastRecipes.join(prefs.lang==='ja' ? '、' : ', '));
 });
 
 function getActiveIngredientsList() {
@@ -202,6 +223,11 @@ function toggleIngredient(idx, el) {
 
 async function showRecipeDetail(recipeName, idx, silent) {
   recipeDetailDiv.textContent = 'レシピ詳細を取得中...';
+  const prefs = {
+    lang: (langSelect && langSelect.value) || 'ja',
+    time: (timeSelect && timeSelect.value) || 'any',
+    diet: (dietSelect && dietSelect.value) || 'none'
+  };
   let response;
   try {
     response = await fetch('/api/recipeDetail', {
@@ -209,7 +235,8 @@ async function showRecipeDetail(recipeName, idx, silent) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         recipeName,
-        availableIngredients: getActiveIngredientsList()
+        availableIngredients: getActiveIngredientsList(),
+        prefs
       })
     });
   } catch (e) {

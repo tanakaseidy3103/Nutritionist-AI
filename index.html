@@ -23,8 +23,29 @@
     <div id="controls" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
       <button id="capture-btn">撮影</button>
       <input id="upload-image" type="file" accept="image/*" style="display:none;">
-      <button id="gallery-btn" type="button">画像を選択</button>
+      <button id="gallery-btn" type="button" style="display:none;">画像を選択</button>
       <button id="retake-btn" style="display:none;">撮り直す</button>
+      
+      <div style="flex-basis:100%;height:0;"></div>
+      <select id="lang-select" aria-label="言語 / Language" style="padding:8px;border-radius:8px;border:1.5px solid #b2e6c7;background:#f8fff8;">
+        <option value="ja" selected>日本語</option>
+        <option value="pt">Português</option>
+        <option value="en">English</option>
+      </select>
+      <select id="time-select" aria-label="所要時間" style="padding:8px;border-radius:8px;border:1.5px solid #b2e6c7;background:#f8fff8;">
+        <option value="any" selected>時間: 指定なし</option>
+        <option value="15">~15分</option>
+        <option value="30">~30分</option>
+        <option value="60">~60分</option>
+      </select>
+      <select id="diet-select" aria-label="食事制限" style="padding:8px;border-radius:8px;border:1.5px solid #b2e6c7;background:#f8fff8;">
+        <option value="none" selected>食事制限: なし</option>
+        <option value="vegetarian">Vegetarian</option>
+        <option value="vegan">Vegan</option>
+        <option value="gluten-free">Gluten-free</option>
+        <option value="low-carb">Low-carb</option>
+      </select>
+      
       <button id="analyze-btn">分析する</button>
     </div>
     <div id="result-area">

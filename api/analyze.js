@@ -7,10 +7,17 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'OPENAI_API_KEY not configured' });
   }
   try {
-    const { imageData } = req.body || {};
+    const { imageData, prefs } = req.body || {};
     if (!imageData) {
       return res.status(400).json({ error: 'imageData is required' });
     }
+    const lang = (prefs && prefs.lang) || 'ja';
+    const time = (prefs && prefs.time) || 'any';
+    const diet = (prefs && prefs.diet) || 'none';
+
+    const langLabel = lang === 'pt' ? 'ポルトガル語' : (lang === 'en' ? '英語' : '日本語');
+    const constraints = `${time !== 'any' ? ` 所要時間は最大${time}分。` : ''}${diet !== 'none' ? ` 食事制限: ${diet}.` : ''}`;
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -22,7 +29,7 @@ export default async function handler(req, res) {
         messages: [
           {
             role: 'system',
-            content: 'あなたは画像内の食材を認識し、JSONで構造化出力を返す日本語アシスタントです。返答は必ず次のJSONのみ: {"description": string, "ingredients": string[], "recipes": string[3]}. 余計な文章は出力しないでください。'
+            content: `あなたは画像内の食材を認識し、ユーザーの希望する言語で出力するアシスタントです。必ず次のJSONのみで回答: {"description": string, "ingredients": string[], "recipes": string[3]}. 余計な文章は書かないでください。出力言語: ${langLabel}。${constraints}`
           },
           {
             role: 'user',

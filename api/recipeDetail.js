@@ -7,10 +7,17 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'OPENAI_API_KEY not configured' });
   }
   try {
-    const { recipeName, availableIngredients } = req.body || {};
+    const { recipeName, availableIngredients, prefs } = req.body || {};
     if (!recipeName) {
       return res.status(400).json({ error: 'recipeName is required' });
     }
+    const lang = (prefs && prefs.lang) || 'ja';
+    const time = (prefs && prefs.time) || 'any';
+    const diet = (prefs && prefs.diet) || 'none';
+
+    const langLabel = lang === 'pt' ? 'ポルトガル語' : (lang === 'en' ? '英語' : '日本語');
+    const constraints = `${time !== 'any' ? ` 所要時間は最大${time}分。` : ''}${diet !== 'none' ? ` 食事制限: ${diet}.` : ''}`;
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -22,7 +29,7 @@ export default async function handler(req, res) {
         messages: [
           {
             role: 'system',
-            content: 'あなたは日本語のレシピアシスタントです。指定された料理名について、材料と手順を日本語で簡潔に説明します。入力で有効な食材のリストが渡された場合、その食材のみで作れるバージョンを優先して提案してください。'
+            content: `あなたはレシピアシスタントです。指定言語(${langLabel})で、材料と手順を簡潔に。可能なら利用可能な食材のみで作れるバージョンを優先。${constraints}`
           },
           {
             role: 'user',
