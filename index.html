@@ -13,6 +13,14 @@
 <body>
   <div class="container">
     <h1>食材分析デモアプリ</h1>
+    <div id="auth-bar" style="display:flex;gap:8px;justify-content:center;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+      <button id="loginButton" type="button">Googleでログイン</button>
+      <button id="logoutButton" type="button" style="display:none;">ログアウト</button>
+      <div id="userInfo" style="display:none;align-items:center;gap:8px;">
+        <span style="color:#1a7f3c;">👤</span>
+        <span id="userName" style="color:#1a7f3c;font-weight:600;"></span>
+      </div>
+    </div>
     <label for="api-key" style="display:none;">OpenAI APIキー:</label>
     <input type="password" id="api-key" placeholder="APIキーを入力してください" style="display:none;">
     <div id="camera-area">
@@ -76,6 +84,8 @@
   <script src="voice.js"></script>
   <script src="history.js"></script>
   <script src="main.js"></script>
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="auth.js"></script>
   <script>
     // Service Worker registration for PWA
     if ('serviceWorker' in navigator) {
