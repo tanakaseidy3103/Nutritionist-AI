@@ -16,9 +16,3 @@
 - ⏳ 分析中のローディングアニメーション
 - 🧹 履歴クリアボタン
 - 🎨 ミニ画像・トースト通知でUX向上
-
----
-
-## 🖥️ Deploy/Vercel とモバイル
-こちらはアプリのデプロイリンクです:
-https://nutritionist-ai-wheat.vercel.app/
