@@ -6,9 +6,6 @@ Nutritionist-AI は、食材の写真から AI が内容を分析し、レシピ
 
 このプロジェクトはハッカソン向けに作成したもので、フロントエンド、生成AI、認証、データ保存、UX改善を組み合わせたポートフォリオ向けの題材として使いやすいです。
 
-### リポジトリ
-
-- GitHub: https://github.com/tanakaseidy3103/Nutritionist-AI.git
 
 ### 主な機能
 
