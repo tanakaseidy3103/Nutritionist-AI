@@ -26,6 +26,13 @@ onAuthStateChanged(auth, (user) => {
     showLoggedInUI(user);
   } else {
     showLoggedOutUI();
+    // Redireciona para login em páginas protegidas (index)
+    const path = (window.location && window.location.pathname) || '';
+    const isIndex = path.endsWith('/') || path.endsWith('/index.html') || path === '';
+    const isAuthPage = path.endsWith('/login.html') || path.endsWith('/register.html');
+    if (isIndex && !isAuthPage) {
+      try { window.location.href = 'login.html'; } catch {}
+    }
   }
 });
 
@@ -57,6 +64,7 @@ if (logoutBtn) {
     try {
       await signOut(auth);
       window.showToast && window.showToast('ログアウトしました');
+      try { window.location.href = 'login.html'; } catch {}
     } catch (e) {
       alert('ログアウトに失敗しました: ' + (e?.message || e));
     }

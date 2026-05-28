@@ -22,9 +22,11 @@ const db = getFirestore(app);
 
 let analytics = null;
 try {
-  if (await analyticsSupported()) {
-    analytics = getAnalytics(app);
-  }
+  analyticsSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app);
+    }
+  }).catch(() => {});
 } catch {}
 
 export { app, auth, db, analytics, GoogleAuthProvider };

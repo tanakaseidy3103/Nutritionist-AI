@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nutritionist-ai-cache-v2';
+const CACHE_NAME = 'nutritionist-ai-cache-v3';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -8,12 +8,22 @@ const urlsToCache = [
   '/openai.js',
   '/voice.js',
   '/history.js',
+  '/firebase.js',
+  '/auth.js',
+  '/auth-guard.js',
+  '/preferences.js',
+  '/login.html',
+  '/login.js',
+  '/register.html',
+  '/register.js',
   '/manifest.json',
   '/favicon-192.png',
   '/favicon-512.png'
 ];
 
 self.addEventListener('install', event => {
+  // Ativa imediatamente a nova versão do SW
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
@@ -26,6 +36,7 @@ self.addEventListener('activate', event => {
       keys.map(key => key !== CACHE_NAME && caches.delete(key))
     ))
   );
+  // Garante que os clientes usem este SW imediatamente
   return self.clients.claim();
 });
 

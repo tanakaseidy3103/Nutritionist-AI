@@ -147,10 +147,11 @@ analyzeBtn.addEventListener('click', async () => {
 
   let response;
   try {
+    const userPrefs = (window.getUserPreferences ? await window.getUserPreferences() : { dislikes: [], allergies: [], calorieTarget: '' });
     response = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ imageData, prefs })
+      body: JSON.stringify({ imageData, prefs, userPrefs })
     });
   } catch (e) {
     window.hideSpinner && window.hideSpinner();
@@ -182,6 +183,8 @@ analyzeBtn.addEventListener('click', async () => {
     el.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleIngredient(idx, el); } };
     ingredientsDiv.appendChild(el);
   });
+  // focus first chip for accessibility
+  try { const firstChip = ingredientsDiv.querySelector('.chip'); if (firstChip) firstChip.focus(); } catch {}
   recipesDiv.innerHTML = '';
   for (let i = 0; i < lastRecipes.length; i++) {
     const name = lastRecipes[i];
@@ -259,6 +262,7 @@ async function showRecipeDetail(recipeName, idx, silent) {
     time: (timeSelect && timeSelect.value) || 'any',
     diet: (dietSelect && dietSelect.value) || 'none'
   };
+  const userPrefs = (window.getUserPreferences ? await window.getUserPreferences() : { dislikes: [], allergies: [], calorieTarget: '' });
   let response;
   try {
     response = await fetch('/api/recipeDetail', {
@@ -267,7 +271,8 @@ async function showRecipeDetail(recipeName, idx, silent) {
       body: JSON.stringify({
         recipeName,
         availableIngredients: getActiveIngredientsList(),
-        prefs
+        prefs,
+        userPrefs
       })
     });
   } catch (e) {
