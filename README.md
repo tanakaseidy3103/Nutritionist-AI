@@ -1,3 +1,4 @@
+<img width="547" height="447" alt="Captura de tela 2026-07-14 105215" src="https://github.com/user-attachments/assets/b2146726-4389-4cb6-a2ef-c49131e7b023" />
 # 🍽️ Nutritionist-AI
 
 ## 日本語
